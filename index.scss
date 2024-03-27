@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+    /*border: 1px solid red;*/
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-color:grey;
+    overflow:hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#CalcContainer {
+    border: 2px solid black;
+    height: 300px;
+    width: 600px;
+    
+    #Display {
+        width:100%;
+        height: 30%;
+        background-color: black;
+        color: white;
+        text-align: right;
+        font-size: 20px;
+    }
+    #Buttons {
+        /*border:1px solid red;*/
+        height:70%;
+        display:grid;
+        grid-template-columns: 60% auto;
+        #Numbers{
+            display:grid;
+            grid-template-columns: auto auto auto;
+            #zero {
+                grid-column: 1 / span 2;
+            }
+        }
+        #functions {
+            display:grid;
+            grid-template-columns: auto auto;
+            #equals {
+                grid-column: 1 / span 2;
+                background-color: green;
+            }
+        }
+    }
+}
