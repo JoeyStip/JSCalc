@@ -25,9 +25,25 @@ body {
   color: white;
   text-align: right;
   font-size: 20px;
+  display: grid;
+  grid-template-rows: auto auto;
+}
+#CalcContainer #Display #firstLine {
+  position: relative;
+  top: 1px;
+  height: 55px;
+  font-size: 35px;
+  border: 1px solid black;
+}
+#CalcContainer #Display #secondLine {
+  position: relative;
+  bottom: 1px;
+  display: block;
+  height: 50%;
 }
 #CalcContainer #Buttons {
   /*border:1px solid red;*/
+  font-size: 25px;
   height: 70%;
   display: grid;
   grid-template-columns: 60% auto;
@@ -43,7 +59,9 @@ body {
   display: grid;
   grid-template-columns: auto auto;
 }
+#CalcContainer #Buttons #functions #clear {
+  background-color: red;
+}
 #CalcContainer #Buttons #functions #equals {
-  grid-column: 1/span 2;
   background-color: green;
 }/*# sourceMappingURL=index.css.map */
