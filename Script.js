@@ -2,18 +2,40 @@ $(document).ready(function(){
   //  $("button").addClass("animated bounce")
 })
 
-let Topdisplay = ""
-let Botdisplay = ""
 let expression = 1
 let presscounter = 0
+let LastPressed = ""
 
 $("button").click(function(){  
+    if(presscounter<1){
+        Topdisplay = "0"
+        Botdisplay = "0"
+    }
+    if(parseInt($(this).text())){
+    } else {
+        Topdisplay = Topdisplay.slice(0,-1)
+        Botdisplay = Botdisplay.slice(0, -1)
+    }
+
+    LastPressed = $(this).text()
+    
     switch($(this).attr('id')){
         case "clear":
-            Topdisplay = ""
-            Botdisplay = ""
+            Topdisplay = "0"
+            Botdisplay = "0"
             expression = 0
             presscounter = 0
+            LastPressed = ""
+            break
+        case "divide":
+            if(presscounter < 1){
+                expression = 1
+            }
+            expression /= parseInt(Topdisplay)
+            Topdisplay = ""
+            Botdisplay += " / "
+            presscounter += 1;
+            //console.log(expression)
             break
         case "multiply":
             if(presscounter < 1){
@@ -40,43 +62,40 @@ $("button").click(function(){
             //console.log(expression)
             break
         case "equals":
-
-            let exp = Botdisplay.slice().split(" ")
-            //console.log(Botdisplay, exp, parseInt("56")?"Y":"N")
-
-            let result = exp.reduce((result, x, ind, arr)=>{
-                //console.log("result: " + result, "x: " + parseInt(x), "ind: " + ind, "arr: " + arr)
-                if(parseInt(x)){
-                    if(ind>0){
-                        console.log(result, ind, parseInt(x) + arr[ind-1] + result)
-                        return parseInt(x) + arr[ind-1] + result
-                        //console.log(result, "test1") 
-                    } else {
-                        
-                        return result + parseInt(x) 
-                        //console.log("x: " + x, "result: " + result, "test2")
-                    }
-                }
-            },0)
-            console.log(result)
+            Topdisplay = Math.round(eval(Botdisplay)*10000)/10000            
+            Botdisplay = Botdisplay + " = " + Math.round(eval(Botdisplay)*10000)/10000
+            expression = 1
+            presscounter = 0
             break
+    }
+    function addCommas(n, x){
+        let reg = /\B(?=(\d{3})+(?!\d))/g
+        return n.toString().replace(reg, " ")
     }
 
     if($(this).parent().attr('id')=="Numbers"){
-        //console.log(Topdisplay.indexOf("."))
+        
+        //replaces the zero display with your button press
+        if(Topdisplay.indexOf("0")==0){
+            Topdisplay = ""
+            Botdisplay = ""
+        }
+        //if no decimal, proceed
         if(Topdisplay.indexOf(".")<0){
-            Topdisplay += $(this).text()
-            Botdisplay += $(this).text()
-            
+                presscounter += 1;
+                LastPressed = $(this).text()
+                Topdisplay += $(this).text()
+                Botdisplay += $(this).text()
+        //prevents more than one decimals being entered
         }else if($(this).text()=="."){
-
         } else {
+            presscounter += 1;
+            LastPressed = $(this).text()
             Topdisplay += $(this).text()
             Botdisplay += $(this).text()
         }
     };
 
-    $("#firstLine").text(Topdisplay);
-    $("#secondLine").text(Botdisplay);
-    
+    $("#display").text(addCommas(Topdisplay, 1));
+    $("#secondLine").text(addCommas(Botdisplay, 0));
 })
