@@ -9,7 +9,7 @@ let LastPressed = ""
 $("button").click(function(){  
     if(presscounter<1){
         Topdisplay = "0"
-        Botdisplay = "0"
+        Botdisplay = "0" 
     }
     if(parseInt($(this).text())){
     } else {
