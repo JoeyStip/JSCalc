@@ -55,13 +55,13 @@ body {
 #CalcContainer #Buttons #Numbers #zero {
   grid-column: 1/span 2;
 }
-#CalcContainer #Buttons #functions {
+#CalcContainer #Buttons #Functions {
   display: grid;
   grid-template-columns: auto auto;
 }
-#CalcContainer #Buttons #functions #clear {
+#CalcContainer #Buttons #Functions #clear {
   background-color: red;
 }
-#CalcContainer #Buttons #functions #equals {
+#CalcContainer #Buttons #Functions #equals {
   background-color: green;
 }/*# sourceMappingURL=index.css.map */
