@@ -110,7 +110,12 @@ $("button").click(function(){
     function addCommas(n, x){
         let reg = /\B(?=(\d{3})+(?!\d))/g
         
+        //\d{4,}\.\d{4,}  < a regex that matches all individual numebers that may need commas
+
         if(/\.\d{3,}/.test(n)){
+            if(/\=/.test(n)){
+                n = n.match(/(?<=\=)[\d\s.]+/)
+            }
             let beforeDec = n.toString().match(/.+(?=\.)/)
             let afterDec = n.toString().match(/(?<=\.).+/)
             return beforeDec[0].replace(reg, ",") + "." + afterDec[0]
@@ -121,6 +126,6 @@ $("button").click(function(){
         
     }
 
-    $("#display").text(addCommas(Topdisplay, 1));
-    $("#secondLine").text(addCommas(Botdisplay, 0));
+    $("#display").text(addCommas(Topdisplay, 0));
+    $("#secondLine").text(addCommas(Botdisplay, 1));
 })
