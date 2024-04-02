@@ -2,32 +2,29 @@ $(document).ready(function(){
   //  $("button").addClass("animated bounce")
 })
 
-let expression = 1
 let presscounter = 0
 let LastPressed = ""
 let currentPressID = ""
 let LastPressedID =  ""
 let parentID = ""
+let Topdisplay = ""
+let Botdisplay = ""
 
 $("button").click(function(){  
     LastPressed = $(this).text()
     currentPressID = $(this).attr('id')
     parentID = $(this).parent().attr('id')
 
-    if(presscounter<1){
-        Topdisplay = "0"
-        Botdisplay = "0" 
-    }
+    //if(presscounter<1){
+    //    Topdisplay = "0"
+    //    Botdisplay = "0" 
+    //}
     
     function ChangeOperator(){
-        if ((Botdisplay[Botdisplay.length-2] == "-")){
-            if(!parseInt(Botdisplay[Botdisplay.length-5])){
-                Botdisplay = Botdisplay.slice(0, Topdisplay.length-4)
-            } else{
-                Botdisplay = Botdisplay.slice(0, Topdisplay.length-2)
-            }
+        if (/\s\W\s\s\W\s$/.test(Botdisplay)){
+            Botdisplay = Botdisplay.replace(/\s\W\s\s\W\s$/,"")
         } else {
-            Botdisplay = Botdisplay.slice(0, Topdisplay.length-2)
+            Botdisplay = Botdisplay.slice(0, Topdisplay.length-3)
         }
     }
     
@@ -39,56 +36,53 @@ $("button").click(function(){
                 case "clear":
                     Topdisplay = "0"
                     Botdisplay = "0"
-                    expression = 0
                     presscounter = 0
                     LastPressed = ""
                     break
                 case "divide":
-                    if(!parseInt(Botdisplay[Botdisplay.length-2])){
+                    if(/\W\s$/.test(Botdisplay)){
                         ChangeOperator();
-                    }   
-                    if(presscounter < 1){
-                        expression = 1
-                    }
-                    expression /= parseInt(Topdisplay)
+                    } 
+                    if(/=/.test(Botdisplay)){
+                        Botdisplay = Botdisplay.match(/(?=\=).+$/g)[0].slice(2)
+                    }  
                     Topdisplay = ""
                     Botdisplay += " / "
                     presscounter += 1;
                     break
                 case "multiply":
-                    if(!parseInt(Botdisplay[Botdisplay.length-2])){
+                    if(/\W\s$/.test(Botdisplay)){
                         ChangeOperator();
                     }
-                    if(presscounter < 1){
-                        expression = 1
-                    }
-                    expression *= parseInt(Topdisplay)
+                    if(/=/.test(Botdisplay)){
+                        Botdisplay = Botdisplay.match(/(?=\=).+$/g)[0].slice(2)
+                    } 
                     Topdisplay = ""
                     Botdisplay += " * "
                     presscounter += 1;
                     break
                 case "subtract":
-                    if(!parseInt(Botdisplay[Botdisplay.length-2])){
-                        ChangeOperator();
-                    }
-                    expression -= parseInt(Topdisplay) 
+                    if(/=/.test(Botdisplay)){
+                        Botdisplay = Botdisplay.match(/(?=\=).+$/g)[0].slice(2)
+                    } 
                     Topdisplay = ""
                     Botdisplay += " - "
                     presscounter += 1;
                     break
                 case "add":
-                    if(!parseInt(Botdisplay[Botdisplay.length-2])){
+                    if(/\W\s$/.test(Botdisplay)){
                         ChangeOperator();
                     }
-                    expression += parseInt(Topdisplay) 
+                    if(/=/.test(Botdisplay)){
+                        Botdisplay = Botdisplay.match(/(?=\=).+$/g)[0].slice(2)
+                    } 
                     Topdisplay = ""
                     Botdisplay += " + "
                     presscounter += 1;
                     break
                 case "equals":
-                    Topdisplay = Math.round(eval(Botdisplay)*10000)/10000            
-                    Botdisplay = Botdisplay + " = " + Math.round(eval(Botdisplay)*10000)/10000
-                    expression = 1
+                    Topdisplay = Math.round(eval(Botdisplay)*10000)/10000  
+                    Botdisplay = Botdisplay + " = " + Topdisplay
                     presscounter = 0
                     break
                 }
@@ -100,13 +94,11 @@ $("button").click(function(){
             }
             if(Topdisplay.indexOf(".")<0){//if no decimal, proceed
                     presscounter += 1;
-                    LastPressed = LastPressed
                     Topdisplay += LastPressed
                     Botdisplay += LastPressed
             }else if($(this).text()=="."){//prevents more than one decimals being entered
             } else {
                 presscounter += 1;
-                LastPressed = LastPressed
                 Topdisplay += LastPressed
                 Botdisplay += LastPressed
             }
@@ -117,7 +109,16 @@ $("button").click(function(){
     
     function addCommas(n, x){
         let reg = /\B(?=(\d{3})+(?!\d))/g
-        return n.toString().replace(reg, " ")
+        
+        if(/\.\d{3,}/.test(n)){
+            let beforeDec = n.toString().match(/.+(?=\.)/)
+            let afterDec = n.toString().match(/(?<=\.).+/)
+            return beforeDec[0].replace(reg, ",") + "." + afterDec[0]
+        } else {
+            return n.toString().replace(reg, ",")
+        }
+
+        
     }
 
     $("#display").text(addCommas(Topdisplay, 1));
