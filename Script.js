@@ -88,11 +88,11 @@ $("button").click(function(){
                 }
             break
         case "Numbers": 
-            if(Topdisplay.indexOf("0")==0){ //replaces the zero display with your button press
+            if(Topdisplay.toString().indexOf("0")==0){ //replaces the zero display with your button press
                 Topdisplay = ""
                 Botdisplay = ""
             }
-            if(Topdisplay.indexOf(".")<0){//if no decimal, proceed
+            if(Topdisplay.toString().indexOf(".")<0){//if no decimal, proceed
                     presscounter += 1;
                     Topdisplay += LastPressed
                     Botdisplay += LastPressed
@@ -108,22 +108,22 @@ $("button").click(function(){
     LastPressedID = $(this).attr('id')
     
     function addCommas(n, x){
-        let reg = /\B(?=(\d{3})+(?!\d))/g
-        
-        //\d{4,}\.\d{4,}  < a regex that matches all individual numebers that may need commas
 
-        if(/\.\d{3,}/.test(n)){
-            if(/\=/.test(n)){
-                n = n.match(/(?<=\=)[\d\s.]+/)
+        let parts = n.toString().split(" ")
+
+        let callBack=(x)=>{
+            if(/\./.test(x)){
+                return x.toString().replace(/\B(?=(\d{3})+(?=\.))/g,",")
+            } else {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")
             }
-            let beforeDec = n.toString().match(/.+(?=\.)/)
-            let afterDec = n.toString().match(/(?<=\.).+/)
-            return beforeDec[0].replace(reg, ",") + "." + afterDec[0]
-        } else {
-            return n.toString().replace(reg, ",")
         }
 
-        
+        if(parts.length>1){
+            return parts.map(callBack).join(" ")
+        } else {
+            return parts.map(callBack)
+        }
     }
 
     $("#display").text(addCommas(Topdisplay, 0));
